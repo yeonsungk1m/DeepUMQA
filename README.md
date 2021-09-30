@@ -2,10 +2,10 @@
 Ultrafast Shape Recognition-based Protein Model Quality Assessment using Deep Learning
 
 Developer:
-Saisai Guo
+Saisai Guo and Jun Liu
 College of Information Engineering
 Zhejiang University of Technology, Hangzhou 310023, China
-Email: 2111903076@zjut.edu.cn
+Email: ssgmamba0824@163.com, junl@zjut.edu.cn
 
 Contact:
 Guijun Zhang, Prof

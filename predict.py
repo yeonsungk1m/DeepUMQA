@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, "/iobio/yt/gss/DeepAccNet/")
+sys.path.insert(0, "/iobio/yt/gss/DeepUMQA/")
 import deepUMQA as umqa
 import torch
 import numpy as np

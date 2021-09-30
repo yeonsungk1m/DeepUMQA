@@ -52,7 +52,7 @@ python DeepUMQA.py -r -v input output
 
 python DeepUMQA.py --featurize input/ outputFea/
 
-#traning 
+# Traning
 
 python train.py  models/
 

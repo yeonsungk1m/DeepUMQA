@@ -6,8 +6,7 @@ from .myresnet import *
 # Network architecture
 
 class myDeepUMQA(torch.nn.Module):
-    
-    # Parameter initialization
+
     def __init__(self, 
                  onebody_size = 73,
                  twobody_size = 33,

@@ -1,21 +1,18 @@
 # DeepUMQA
 Ultrafast Shape Recognition-based Protein Model Quality Assessment using Deep Learning
 
-Developer:
+**Developer:**
 
-Saisai Guo and Jun Liu
+  Saisai Guo and Jun Liu
+  College of Information Engineering
+  Zhejiang University of Technology, Hangzhou 310023, China
+  Email: ssgmamba0824@163.com, junl@zjut.edu.cn
 
-College of Information Engineering
-
-Zhejiang University of Technology, Hangzhou 310023, China
-
-Email: ssgmamba0824@163.com, junl@zjut.edu.cn
-
-Contact:
-Guijun Zhang, Prof
-College of Information Engineering
-Zhejiang University of Technology, Hangzhou 310023, China
-Email: zgj@zjut.edu.cn
+**Contact:**
+  Guijun Zhang, Prof
+  College of Information Engineering
+  Zhejiang University of Technology, Hangzhou 310023, China
+  Email: zgj@zjut.edu.cn
 
 # INSTALLATION
 - Python > 3.5

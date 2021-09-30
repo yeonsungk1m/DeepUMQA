@@ -5,18 +5,18 @@ from os.path import join, isfile, isdir
 from os import listdir
 
 class DecoyDataset(Dataset):
-
     def __init__(self,
                  targets,
                  root_dir        = "/iobio/public/databases/DeepUMQA/Features7800USR",
                  multi_dir       = False,
                  root_dirs       = ["/iobio/public/databases/DeepUMQA/Features7800USR", "/iobio/public/databases/DeepUMQA/Features7800USR"],
-                 lengthmax       = 500, 
+                 lengthmax       = 300, 
                  digits          = [-20.0, -15.0, -10.0, -4.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 4.0, 10.0, 15.0, 20.0],
                  verbose         = False,
                  include_native  = True,
                  distance_cutoff = 0,
-                 features        = []):
+                 features        = []
+                ):
 
         self.datadir = root_dir
         self.digits = digits
@@ -35,8 +35,7 @@ class DecoyDataset(Dataset):
 
         temp = []
         for p in targets:
-            if not self.bert or isfile(join(self.bertdir, "bert_"+p+".npy")):
-                # Loading data
+    
                 if not multi_dir:
                     path = join(self.datadir, p)
                     sample_files = [join(path, f[:-13]) for f in listdir(path) if isfile(join(path, f)) and "features.npz" in f]

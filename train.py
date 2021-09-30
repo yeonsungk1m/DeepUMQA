@@ -8,7 +8,7 @@ import pandas as pd
 import multiprocessing
 
 import sys
-sys.path.insert(0, "./") # 新添加的目录会优先于其他目录被import检查
+sys.path.insert(0, "./")
 import deepUMQA
     
 import torch.optim as optim
@@ -20,7 +20,7 @@ import torch
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Error predictor network trainer",
+    parser = argparse.ArgumentParser(description="predictor network train",
                                      epilog="v0.0.1")
     
     parser.add_argument("folder",
@@ -31,32 +31,32 @@ def main():
                         "-e", action="store",
                         type=int,
                         default=100,
-                        help="# of epochs (path over all proteins) to train for (Default: 200)")
+                        help="# Default: 100)
     
 
     parser.add_argument("--multi_dir",
                         "-multi_dir",
                         action="store_true",
                         default=False,
-                        help="Run with multiple direcotory sources (Default: False)")
+                        help="Run with multiple direcotory sources")
     
     parser.add_argument("--num_blocks",
                         "-numb", action="store",
                         type=int,
                         default=3,
-                        help="# of reidual blocks (Default: 8)")
+                        help="# reidual blocks")
     
     parser.add_argument("--num_filters",
                         "-numf", action="store",
                         type=int,
                         default=128,
-                        help="# of base filter size in residual blocks (Default: 256)")
+                        help="# of base filter size in residual blocks")
     
     parser.add_argument("--size_limit",
                         "-size_limit", action="store",
                         type=int,
                         default=300,
-                        help="protein size limit (Default: 300)")
+                        help="protein size limit")
     
     parser.add_argument("--decay",
                         "-d", action="store",
@@ -291,7 +291,6 @@ def main():
                             'valid_loss': valid_loss,
                         }, join(folder, "temp_"+new_best_models[i][2]))
 
-                # Renaming
                 for i in range(len(new_best_models)):
                     command = "mv %s %s"%(join(folder, "temp_"+name_map[i]), join(folder, name_map[i]))
                     os.system(command)

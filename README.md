@@ -44,7 +44,7 @@ optional arguments:
 
 1. Predicting
 
-python DeepUMQA.py -r -v input output
+python DeepUMQA.py -r -v input/ output/
 
 2. Feature extracting
 

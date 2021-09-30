@@ -21,10 +21,9 @@ Email: zgj@zjut.edu.cn
 
 2.RUNNING
 ```
-usage: DeepAccNet.py [-h] [--modelpath MODELPATH] [--pdb] [--csv] [--leaveTempFile] [--process PROCESS] [--featurize]
+usage: DeepUMQA.py [-h] [--modelpath MODELPATH] [--pdb] [--csv] [--leaveTempFile] [--process PROCESS] [--featurize]
                      [--reprocess] [--verbose] [--ensemble]
                      input ...
-
 
 positional arguments:
   input                 path to input folder or input pdb file

@@ -25,24 +25,23 @@ usage: DeepUMQA.py [-h] [--modelpath MODELPATH] [--pdb] [--csv] [--leaveTempFile
                      [--reprocess] [--verbose] [--ensemble]
                      input ...
 
-positional arguments:
-  input                 path to input folder or input pdb file
+arguments:
+  input                 path to input
   output                path to output (folder path, npz, or csv)
 
 optional arguments:
   -h, --help            show this help message and exit
-  --pdb, -pdb           Running on a single pdb file instead of a folder)
+  --pdb, -pdb           Running on a single pdb 
   --csv, -csv           Writing results to a csv file 
   --per_res_only, -pr   Writing per-residue accuracy only 
   --leaveTempFile, -lt  Leaving temporary files 
   --process PROCESS, -p PROCESS
-                        Specifying # of cpus to use for featurization
+                       
   --featurize, -f       Running only the featurization part 
   --reprocess, -r       Reprocessing all feature files 
   --verbose, -v         Activating verbose flag 
-  --ensemble, -e        Running with ensembling of 4 models. This adds 4x computational time with some overheads
+  --ensemble, -e        Running with ensembling of 4 models. 
                    
-
 ```
 
 # Running on a folder of pdbs
@@ -58,5 +57,5 @@ python DeepUMQA.py --featurize input/ outputFea/
 python train.py  models/
 
 
-5. DISCLAIMER
+3. DISCLAIMER
 The executable software and the source code of DeepUMQA is distributed free of charge as it is to any non-commercial users. The authors hold no liabilities to the performance of the program.

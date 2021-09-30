@@ -21,9 +21,7 @@ Email: zgj@zjut.edu.cn
 
 # RUNNING
 ```
-usage: DeepUMQA.py [-h] [--modelpath MODELPATH] [--pdb] [--csv] [--leaveTempFile] [--process PROCESS] [--featurize]
-                     [--reprocess] [--verbose] [--ensemble]
-                     input ...
+DeepUMQA.py 
 
 arguments:
   input                 path to input

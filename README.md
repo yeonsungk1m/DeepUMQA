@@ -13,14 +13,13 @@ College of Information Engineering
 Zhejiang University of Technology, Hangzhou 310023, China
 Email: zgj@zjut.edu.cn
 
-1. INSTALLATION
+# INSTALLATION
 - Python > 3.5
 - PyTorch 1.3
 - PyRosetta
 - Tested on Ubuntu 20.04 LTS
 
-
-2. RUNNING
+# RUNNING
 ```
 usage: DeepUMQA.py [-h] [--modelpath MODELPATH] [--pdb] [--csv] [--leaveTempFile] [--process PROCESS] [--featurize]
                      [--reprocess] [--verbose] [--ensemble]
@@ -45,18 +44,17 @@ optional arguments:
                    
 ```
 
-# Running on a folder of pdbs
+1. Predicting
 
 python DeepUMQA.py -r -v input output
 
-# Feature extraction
+2. Feature extracting
 
 python DeepUMQA.py --featurize input/ outputFea/
 
-# Traning
+3. Traning
 
 python train.py  models/
 
-
-3. DISCLAIMER
+# DISCLAIMER
 The executable software and the source code of DeepUMQA is distributed free of charge as it is to any non-commercial users. The authors hold no liabilities to the performance of the program.

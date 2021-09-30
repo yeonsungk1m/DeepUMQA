@@ -19,7 +19,7 @@ Email: zgj@zjut.edu.cn
 - PyRosetta
 - Tested on Ubuntu 20.04 LTS
 
-2.RUNNING
+2. RUNNING
 ```
 usage: DeepUMQA.py [-h] [--modelpath MODELPATH] [--pdb] [--csv] [--leaveTempFile] [--process PROCESS] [--featurize]
                      [--reprocess] [--verbose] [--ensemble]

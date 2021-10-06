@@ -20,8 +20,7 @@ import torch
 
 
 def main():
-    parser = argparse.ArgumentParser(description="predictor network train",
-                                     epilog="v0.0.1")
+    parser = argparse.ArgumentParser(description="predictor network train")
     
     parser.add_argument("folder",
                         action="store",
@@ -31,7 +30,7 @@ def main():
                         "-e", action="store",
                         type=int,
                         default=100,
-                        help="# Default: 100)
+                        )
     
 
     parser.add_argument("--multi_dir",

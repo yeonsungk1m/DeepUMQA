@@ -123,7 +123,7 @@ def main():
             return -1
         
     script_dir = os.path.dirname(__file__)
-    base = os.path.join(script_dir, "models/")
+    base = os.path.join(script_dir, "model/")
     
     modelpath = join(base, "DeepUMQA")
 

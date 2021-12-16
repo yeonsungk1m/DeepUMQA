@@ -43,8 +43,14 @@ optional arguments:
 ```
 
 1. Predicting
+            
+            # Running on a folder of pdbs
+            
+            python DeepUMQA.py -r -v input/ output/
 
-python DeepUMQA.py -r -v input/ output/
+            # Running on a single pdb file
+
+            python DeepUMQA.py -r -v --pdb pdbfile
 
 2. Feature extracting
 

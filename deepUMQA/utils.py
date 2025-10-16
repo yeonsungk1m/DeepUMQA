@@ -61,18 +61,6 @@ blosum = [i.strip().split() for i in open(location).readlines()[1:-1]]
 blosummap = dict([(l[0], np.array([int(i) for i in l[1:]])/10.0) for l in blosum])
 
 
-# ROSETTA ENERGIES
-
-energy_terms = [pyrosetta.rosetta.core.scoring.ScoreType.fa_atr,\
-                pyrosetta.rosetta.core.scoring.ScoreType.fa_rep,\
-                pyrosetta.rosetta.core.scoring.ScoreType.fa_sol,\
-                pyrosetta.rosetta.core.scoring.ScoreType.lk_ball_wtd,\
-                pyrosetta.rosetta.core.scoring.ScoreType.fa_elec,\
-                pyrosetta.rosetta.core.scoring.ScoreType.hbond_bb_sc,\
-                pyrosetta.rosetta.core.scoring.ScoreType.hbond_sc]
-energy_names = ["fa_atr", "fa_rep", "fa_sol", "lk_ball_wtd", "fa_elec", "hbond_bb_sc", "hbond_sc"]
-
-
 # MEILER
 
 location = pkg_resources.resource_filename(__name__, "property/Meiler.csv")
@@ -298,35 +286,6 @@ def getEulerOrientation(pose):
 
     output = np.concatenate([trans_z, rot_z], axis=2)
     return output
-
-
-def getEnergy(p, scorefxn):
-    nres = p.size()
-    res_pair_energy_z = np.zeros((nres, nres))
-    res_energy_no_two_body_z = np.zeros((nres))
-
-    totE = scorefxn(p)
-    energy_graph = p.energies().energy_graph()
-    twobody_terms = p.energies().energy_graph().active_2b_score_types()
-    onebody_weights = pyrosetta.rosetta.core.scoring.EMapVector()
-    onebody_weights.assign(scorefxn.weights())
-
-    for term in twobody_terms:
-        if 'intra' not in pyrosetta.rosetta.core.scoring.name_from_score_type(term):
-            onebody_weights.set(term, 0)
-
-    for i in range(1, nres + 1):
-        res_energy_no_two_body_z[i - 1] = p.energies().residue_total_energies(i).dot(onebody_weights)
-
-        for j in range(1, nres + 1):
-            if i == j: continue
-            edge = energy_graph.find_edge(i, j)
-            if edge is None:
-                energy = 0.
-            else:
-                res_pair_energy_z[i - 1][j - 1] = edge.fill_energy_map().dot(scorefxn.weights())
-
-    return res_energy_no_two_body_z, res_pair_energy_z
 
 
 def get1hotAA(pose, indecies=AA_to_num):

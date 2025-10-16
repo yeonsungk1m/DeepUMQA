@@ -26,7 +26,7 @@ def main():
         
         net = umqa.myDeepUMQA(num_chunks = 3,
                                 num_channel = 128,
-                                twobody_size = 33)
+                                twobody_size = 24)
 
         checkpoint = torch.load(join(name, "%s.pkl"%(model)))
         net.load_state_dict(checkpoint["model_state_dict"])

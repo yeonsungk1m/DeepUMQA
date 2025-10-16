@@ -187,7 +187,7 @@ def main():
         
         result = {}
         for modelname in modelnames:
-            model = umqa.myDeepUMQA(twobody_size = 33)
+            model = umqa.myDeepUMQA(twobody_size = 24)
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
             #device = torch.device("cpu")
             checkpoint = torch.load(join(modelpath, modelname), map_location=device)
@@ -273,7 +273,7 @@ def main():
             
         if isfile(feature_file_name):
 
-            model = umqa.myDeepUMQA(twobody_size = 33)
+            model = umqa.myDeepUMQA(twobody_size = 24)
             device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
             #device = torch.device("cpu")
 

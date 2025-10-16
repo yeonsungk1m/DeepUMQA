@@ -160,8 +160,8 @@ class DecoyDataset(Dataset):
     
     # Getting masks
     def getMask(self, include):
-        feature2D = [("distance", 1), ("rosetta", 9), ("distance2", 4), ("orientation", 18), ("seqsep", 1), ("bert", 16)]
-        feature1D = [("angles", 10), ("rosetta", 4), ("ss", 4), ("aa", 52)]
+        feature2D = [("distance", 1), ("distance2", 4), ("orientation", 18), ("seqsep", 1)]
+        feature1D = [("angles", 10), ("ss", 4), ("aa", 55)]
         for e in include:
             if e not in [i[0] for i in feature2D] and e not in [i[0] for i in feature1D]:
                 print("Feature names do not exist.")

@@ -8,8 +8,8 @@ from .myresnet import *
 class myDeepUMQA(torch.nn.Module):
 
     def __init__(self, 
-                 onebody_size = 73,
-                 twobody_size = 33,
+                 onebody_size = 69,
+                 twobody_size = 24,
                  protein_size = None,
                  num_chunks   = 3,
                  num_channel  = 128,

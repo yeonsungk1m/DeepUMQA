@@ -113,7 +113,7 @@ def main():
     if not args.silent: print("instantitate a model")
     net = deepUMQA.myDeepUMQA(num_chunks   = args.num_blocks,
                                 num_channel  = args.num_filters,
-                                twobody_size = 33)
+                                twobody_size =24)
     rdevreModel = False
     
     if isdir(args.folder): 

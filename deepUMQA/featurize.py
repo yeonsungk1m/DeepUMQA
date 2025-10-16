@@ -11,32 +11,6 @@ import time
 from .utils import *
 
 
-def get_hbonds(pose):
-
-    
-    hb_srbb = []
-    hb_lrbb = []
-    
-    hbond_set = pose.energies().data().get(pyrosetta.rosetta.core.scoring.EnergiesCacheableDataType.HBOND_SET)
-    for i in range(1, hbond_set.nhbonds()):
-        hb = hbond_set.hbond(i)
-        if hb:
-            acceptor = hb.acc_res()
-            donor = hb.don_res()
-            wtype = pyrosetta.rosetta.core.scoring.hbonds.get_hbond_weight_type(hb.eval_type())
-            energy = hb.energy()
-
-            is_acc_bb = hb.acc_atm_is_protein_backbone()
-            is_don_bb = hb.don_hatm_is_protein_backbone()
-
-            if is_acc_bb and is_don_bb:
-                if wtype == pyrosetta.rosetta.core.scoring.hbonds.hbw_SR_BB:
-                    hb_srbb.append((acceptor, donor, energy))
-                elif wtype == pyrosetta.rosetta.core.scoring.hbonds.hbw_LR_BB:
-                    hb_lrbb.append((acceptor, donor, energy))
-                
-    return hb_srbb, hb_lrbb
-
 # In: pose, Out: distance maps with different atoms
 def extract_multi_distance_map(pose):
 
@@ -52,90 +26,24 @@ def extract_multi_distance_map(pose):
     return output
 
 
-def extract_EnergyDistM(pose, energy_terms):
+def extract_pairwise_distances(pose):
     
 
 
     # Get the number of residues in the protein.
     length = int(pose.total_residue())
-    
-    # Prepare distance matrix
-    tensor = np.zeros((1+len(energy_terms)+2, length, length))
-    
-    # Obtain energy graph
-    energies = pose.energies()
-    graph = energies.energy_graph()
-    
     aas = []
-    for i in range(length):
-        index1 = i + 1
-        aas.append(pose.residue(index1).name().split(":")[0].split("_")[0])
-        
-        # Get an edge iterator
-        iru = graph.get_node(index1).const_edge_list_begin()
-        irue = graph.get_node(index1).const_edge_list_end()
-        
-        # Parse the energy graph.
-        while iru!=irue:
-            # Dereference the pointer and get the other end.
-            edge = iru.__mul__()
-            
-            # Evaluate energy edge and get energy values
-            evals = [edge[e] for e in energy_terms]
-            index2 = edge.get_other_ind(index1)
-            
-            count = 1
-            for k in range(len(evals)):
-                e = evals[k]
-                t = energy_terms[k]
-                
-                # For hbond_bb_sc and hbond_sc, just note the presence
-                if t == pyrosetta.rosetta.core.scoring.ScoreType.hbond_bb_sc or t == pyrosetta.rosetta.core.scoring.ScoreType.hbond_sc:
-                    if e != 0.0:
-                        tensor[count, index1-1, index2-1] = 1
-                # Otherwise record the original values.
-                else:
-                    tensor[count, index1-1, index2-1] = e
-                    
-                count += 1
-            # Move pointer
-            iru.plus_plus()
-    
-    for i in range(1, 1+len(evals)):
-        temp = tensor[i]
-        if i == 1 or i == 2:
-            tensor[i] = np.arcsinh(np.abs(temp))/3.0
-        elif i == 3 or i==4 or i==5:
-            tensor[i] = np.tanh(temp)
-    xyzs = []
-    for i in range(length):
-        index1 = i + 1
-        if ( pose.residue(index1).has("CB") ):
-            xyzs.append(pose.residue(index1).xyz("CB"))
-        else:
-            xyzs.append(pose.residue(index1).xyz("CA"))
-    for i in range(length):
-        for j in range(length):
-            index1 = i + 1    
-            index2 = j + 1
+    coords = []
+    for i in range(1, length + 1):
+        residue = pose.residue(i)
+        aas.append(residue.name().split(":")[0].split("_")[0])
+        atom_name = "CB" if residue.has("CB") else "CA"
+        coords.append(np.array(residue.xyz(atom_name)))
 
-            vector1 = xyzs[i]
-            vector2 = xyzs[j]
+    coords = np.stack(coords)
+    distance_map = scipy.spatial.distance_matrix(coords, coords)
+    tensor = np.expand_dims(distance_map, axis=0)
 
-            distance = vector1.distance(vector2)
-            
-            tensor[0, index1-1, index2-1] = distance 
-
-    hbonds = get_hbonds(pose)
-    for hb in hbonds[0]:
-        index1 = hb[0]
-        index2 = hb[1]
-        tensor[count, index1-1, index2-1] = 1
-    count +=1
-    for hb in hbonds[1]:
-        index1 = hb[0]
-        index2 = hb[1]
-        tensor[count, index1-1, index2-1] = 1
         
     return tensor, aas
 
@@ -427,52 +335,6 @@ def set_features1D(pdict):
     pdict['mask1d'] = mask1d
     pdict['bbpairs'] = bbpairs
 
-def energy_string_to_dict(energy_string):
-    # given an energy_string
-    # returns a dictionary (string --> float) of ALL energy terms
-    energy_string = energy_string.replace(") (", ")\n(")
-    energy_string = energy_string.replace("( ", "").replace(")", "")
-    energy_list = energy_string.split("\n")
-    energy_dict = {}
-    for element in energy_list:
-        (score_term, val) = element.split("; ")
-        energy_dict[score_term] = float(val)
-    return energy_dict
-
-def remove_nonzero_scores(energy_dict):
-    # given an energy_dict
-    # returns an energy_dict with trivial scores removed
-    result = {}
-    for score_term in energy_dict:
-        if energy_dict[score_term] != 0:
-            result[score_term] = energy_dict[score_term]
-    return result
-
-def get_energy_string_quick(energy_obj, res_pos):
-    # given an energy_obj and a residue position
-    # returns an energy_string
-    res_energies = energy_obj.residue_total_energies(res_pos)
-    energy_string = str(res_energies)
-    return energy_string
-
-def get_one_body_score_terms(pose, scorefxn, score_terms):
-    # GIVEN: a pose, a score function, and a list of score terms
-    # note that score_terms is a list of strings. these strings must be
-    # names of score terms spelled as in the energy_string.
-    # RETURNS: one_body_score_terms as a 2d numpy array
-    # the rows are residues
-    # and the columns are the score terms.
-    one_body_score_terms = [] # a list of lists
-    scorefxn(pose)
-    energy_obj = pose.energies()
-    for pos in range(1, len(pose.sequence()) + 1):
-        energy_string = get_energy_string_quick(energy_obj, pos)
-        energy_dict = energy_string_to_dict(energy_string)
-        res_scores = []
-        for term in score_terms:
-            res_scores.append(energy_dict[term])
-        one_body_score_terms.append(res_scores)
-    return np.array(one_body_score_terms).T
 
 def mydot(v1, v2):
     result = 0
@@ -564,22 +426,11 @@ def extractOneBodyTerms(pose, padval=0):
     bond_angles_lengths_mat = (bond_angles_lengths_mat.T-averages).T
     for i in range(len(features2)):
         bond_angles_lengths_mat[i] = np.tanh(bond_angles_lengths_mat[i])
-        
-    
-    # 1 body energy terms
-    score_terms = ["p_aa_pp", "rama_prepro", "omega", "fa_dun"]
-    fa_scorefxn = get_fa_scorefxn()
-    energy_term_mat = get_one_body_score_terms(pose, fa_scorefxn, score_terms)
-    for i in range(len(score_terms)):
-        if score_terms[i] != "fa_dun":
-            energy_term_mat[i] = np.tanh(energy_term_mat[i])
-        else:
-            energy_term_mat[i] = np.arcsinh(energy_term_mat[i])-1
             
     # Secondary structure term
     SS_mat = extractSS(pose)
         
-    return np.concatenate([bond_angles_lengths_mat, energy_term_mat, SS_mat]), features2+score_terms+["E", "L", "H"]
+    return np.concatenate([bond_angles_lengths_mat, SS_mat]), features2+["SS0", "E", "L", "H"]
 
 def init_pose(pose):
 
@@ -619,14 +470,12 @@ def process(args):
         start_time = time.time()
         pose = Pose()
         pose_from_file(pose, filename)
-        fa_scorefxn = get_fa_scorefxn()
-        score = fa_scorefxn(pose)
 
         pdict = init_pose(pose)
         
         euler = getEulerOrientation(pose)
         maps = extract_multi_distance_map(pose)
-        _2df, aas = extract_EnergyDistM(pose, energy_terms)
+        _2df, aas = extract_pairwise_distances(pose)
         _1df, _ = extractOneBodyTerms(pose)
         prop = extract_AAs_properties_ver1(aas)
         
@@ -657,14 +506,12 @@ def process_from_pose(pose):
 
     """
     try:
-        fa_scorefxn = get_fa_scorefxn()
-        score = fa_scorefxn(pose)
 
         pdict = init_pose(pose)
         
         euler = getEulerOrientation(pose)
         maps = extract_multi_distance_map(pose)
-        _2df, aas = extract_EnergyDistM(pose, energy_terms)
+        _2df, aas = extract_pairwise_distances(pose)
         _1df, _ = extractOneBodyTerms(pose)
         prop = extract_AAs_properties_ver1(aas)
 

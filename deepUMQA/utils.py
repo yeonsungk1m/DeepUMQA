@@ -2,8 +2,6 @@ import numpy as np
 import os
 from os import listdir
 from os.path import join, isfile, isdir
-
-from pyrosetta import *
 import math
 import numpy as np
 import pandas as pd

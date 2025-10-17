@@ -1,7 +1,3 @@
-# Instantiate pyrosetta
-from pyrosetta import *
-init(extra_options = "-constant_seed -mute all -read_only_ATOM_entries")
-
 # Import necessary libraries
 import numpy as np
 import math
